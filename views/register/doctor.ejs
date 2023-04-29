@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="form-body">
+        <h2>Doctor Registration</h2>
+        <form action="/register/doctor" method="POST">
+            <label for="docName">Name :
+                <input type="text" name="docName" value="" required id="docName">
+            </label>
+            <label for="docId">Doctor ID :
+                <input type="text" name="docId" value="" id="docId" required>
+            </label>
+            <label for="docEmail">Email :
+                <input type="email" name="docEmail" value="" id="docEmail" required>
+            </label>
+            <label for="docSpeciality">Speciality in :
+                <input type="text" name="docSpeciality" value="" id="docSpeciality" required>
+            </label>
+            <label for="docPassword">Password :
+                <input type="password" name="docPassword" value="" id="docPassword" required>
+            </label>
+
+            <button type="submit">Register</button>
+            <a href="/login/doctor">Login</a>
+        </form>
+    </div>
+</body>
+</html>
