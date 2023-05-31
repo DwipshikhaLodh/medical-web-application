@@ -5,10 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="/stylesheets/logindoctor.css">
 </head>
 <body>
     <div class="form-body">
         <h2>Doctor Login</h2>
+        <% if (messages.error) { %>
+            <%= messages.error %>
+        <% } %>
         <form action="/login/doctor" method="POST">
             <label for="docName">Name :
                 <input type="text" name="docName" value="" required id="docName">
@@ -19,9 +23,10 @@
             <label for="docPassword">Password :
                 <input type="password" name="docPassword" value="" id="docPassword" required>
             </label>
-        </form>
-        <button type="submit">Login</button>
+            <button type="submit">Login</button>
         <a href="/register/doctor">Register</a>
+        </form>
+        
     </div>
 </body>
 </html>

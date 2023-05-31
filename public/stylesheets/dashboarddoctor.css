@@ -1,0 +1,104 @@
+*{
+    margin: 0px;
+}
+
+.body-container{
+    background-color: rgb(229, 240, 245); 
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height:100vh;
+}
+
+.body-aside-left{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100vh;
+    width: 20%;
+}
+
+.upper-nav-body{
+    display: flex;
+    flex-direction: column;
+}
+
+
+.upper-nav-body li, .lower-nav-body li{
+    list-style: none;
+    padding: 10px;
+    margin-bottom: px;
+}
+
+.upper-nav-body li a{
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.lower-nav-body{
+    background-color: rgb(154, 208, 215);
+}
+
+.lower-nav-body li{
+    padding: 20px;
+}
+
+.lower-nav-body li{
+    font-weight: bold;
+}
+
+.other a{
+    color: black;
+}
+
+.current{
+    background-color: rgb(14, 14, 96);
+    border-radius: 20px 0px 0px 20px;
+    margin-top: 18px;
+    margin-bottom: 18px;
+    box-shadow: 1px 1px 8px 2px white;
+}
+
+.current a{
+    color: white;
+    padding-left: 20px;
+}
+
+.fa-heartbeat{
+    padding: 10px;
+    margin-bottom: 30px;
+    padding-left: 0px;
+    padding-top: 20px;
+}
+
+.body-main{
+    width: 80%;
+    height: 100vh;
+    margin-left: 10px;
+}
+
+.upper-body-main{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 10px;
+}
+
+.lower-body-main{
+    background-color: white;
+    height: calc(100vh - 76px);
+    border: 2px solid white;
+    border-radius: 20px 20px 0px 0px;
+    padding: 15px;
+}
+
+.body-aside-right{
+    height: 100vh;
+}
+
+.body-aside-right h3{
+    margin-top: 40px;
+    padding: 10px;
+}

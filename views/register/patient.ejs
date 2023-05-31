@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="/stylesheets/registerdoctor.css">
 </head>
 <body>
     <div class="form-body">
@@ -16,12 +17,25 @@
             <label for="patEmail">Email :
                 <input type="email" name="patEmail" value="" id="patEmail" required>
             </label>
+            <label for="patNum">Contact no. :
+                <input type="number" name="patNum" value="" id="patNum" required>
+            </label>
+            <label for="patDOB">DOB :
+                <input type="date" name="patDOB" value="" id="patDOB" required>
+            </label>
+            Gender :
+            <label class="patGender" for="patGender">
+                <input type="radio" name="patMale" value="" id="patMale">Male
+                <input type="radio" name="patFemale" value="" id="patFemale">Female
+                <input type="radio" name="patother" value="" id="patother">Other
+            </label>
             <label for="patPassword">Password :
                 <input type="password" name="patPassword" value="" id="patPassword" required>
             </label>
+
+            <button type="submit">Register</button>
+            <a href="/login/patient">Login</a>
         </form>
-        <button type="submit">Register</button>
-        <a href="/login/patient">Login</a>
     </div>
 </body>
 </html>
