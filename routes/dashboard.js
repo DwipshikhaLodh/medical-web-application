@@ -16,4 +16,8 @@ router.get('/docDashPatient_PatientInfo', (req, res) => {
     res.render('dashboard/docDashPatient_PatientInfo')
 })
 
+router.get('/patient', (req, res) => {
+    console.log(req.body)
+    res.render('dashboard/patient', { user : req.body.user})
+})
 module.exports = router;

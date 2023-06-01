@@ -1,5 +1,3 @@
-
-
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
@@ -76,7 +74,7 @@ router.post('/patient', async (req, res) => {
         console.log("saving hashing")
         patient = await patient.save();
         console.log("after saving in db")
-        res.redirect('/login/patient')
+        res.redirect('/loginPatient/patient')
 
     }catch(e){
         console.log(e)

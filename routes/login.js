@@ -8,13 +8,11 @@ const bcrypt = require('bcrypt')
 const express = require('express');
 const router = express.Router();
 const passport = require('passport')
-const initializePassport = require('../passport-config')
 const flash = require('express-flash')
 const session = require('express-session')
 const Doctors = require('../models/doctor')
-const Patients = require('../models/patient')
 
-const authenticateUser = async (docName, docPassword, done) => {
+const authenticateDoctor = async (docName, docPassword, done) => {
     console.log(docName)
     const user = await Doctors.find({ name : docName});
     console.log(user[0])
@@ -43,34 +41,6 @@ const authenticateUser = async (docName, docPassword, done) => {
 
 }
 
-const authenticatePatient = async (patName, patPassword, done) => {
-    console.log(patName)
-    const patient = await Patients.find({ name : patName});
-    console.log(patient[0])
-    if(patient == null){
-        return done(null, false, { message : 'No patient with that name'})
-    }
-
-    try{
-        console.log(patPassword, patient[0].password)
-        if(bcrypt.compare(patPassword, patient[0].password, (err) => {
-            if(err){
-                console.log(err);
-                return err;
-            }
-
-            console.log('Logged In Successfully')
-            return done(null, patient[0], {message : 'Logged In Successfully'});
-        }))
-        
-        return done(null, false, { message : 'Password Incorrect'})
-        
-    }catch(e){
-        console.log(e)
-        return done(e)
-    }
-}
-
 //initialize middleware 
 router.use(session({ //sets session to http
     secret : process.env.SESSION_SECRET, // key that will encrypt everything for us
@@ -84,11 +54,8 @@ router.use(passport.session())
 
 //passport to define authentication strategy
 // for doctor
-passport.use(new LocalStrategy( { usernameField : 'docName', passwordField : 'docPassword' }, authenticateUser))
+passport.use(new LocalStrategy( { usernameField : 'docName', passwordField : 'docPassword' }, authenticateDoctor))
 //authenticateUser() sends done(null, user) to serializeUser() 
-
-// for patient
-passport.use(new LocalStrategy( { usernameField : 'patName', passwordField : 'patPassword' }, authenticatePatient))
 
 router.use(flash())
 
@@ -121,16 +88,6 @@ router.get('/doctor', (req, res) => {
 router.post('/doctor', passport.authenticate('local', {
     successRedirect : '/dashboard/doctor',
     failureRedirect : '/login/doctor',
-    failureFlash : true
-}))
-
-router.get('/patient', (req, res) => {
-    res.render('login/patient')
-})
-
-router.post('/patient', passport.authenticate('local', {
-    successRedirect : '/dashboard/patient',
-    failureRedirect : '/login/patient',
     failureFlash : true
 }))
 
