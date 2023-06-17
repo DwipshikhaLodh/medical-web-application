@@ -1,113 +1,134 @@
-if (process.env.NODE_ENV !== 'production'){ // means when we are in development
-    require('dotenv').config()
-}
-
-const LocalStrategy = require('passport-local').Strategy
-const bcrypt = require('bcrypt')
-
+require('dotenv').config();
+const mongoose = require('mongoose');
+const LocalStrategy = require('passport-local').Strategy;
+const bcrypt = require('bcrypt');
 const express = require('express');
 const router = express.Router();
-const passport = require('passport')
-const flash = require('express-flash')
-const session = require('express-session')
-const Doctors = require('../models/doctor')
+const passport = require('passport');
+const flash = require('express-flash');
+const session = require('express-session');
+const Doctors = require('../models/doctor');
+const Patients = require('../models/patient');
+const jwt = require('jsonwebtoken');
+const cookie_parser = require('cookie-parser');
 
-const authenticateDoctor = async (docName, docPassword, done) => {
-    console.log(docName)
-    const user = await Doctors.find({ name : docName});
-    console.log(user[0])
-    if(user == null){
-        return done(null, false, { message : 'No doctor with that name'})
+router.use(cookie_parser());
+
+// MongoDB Connection
+
+const authenticateDoctor = async (req, docName, docPassword, done) => {
+  console.log(docName);
+  const doctor = await Doctors.findOne({ name: docName });
+  console.log(doctor);
+  if (!doctor) {
+    return done(null, false, { message: 'No doctor with that name' });
+  }
+
+  try {
+    const passwordMatch = await bcrypt.compare(docPassword, doctor.hashPassword);
+    if (passwordMatch) {
+      console.log('Logged In Successfully');
+      return done(null, doctor, { message: 'Logged In Successfully' });
+    } else {
+      return done(null, false, { message: 'Password Incorrect' });
     }
+  } catch (e) {
+    console.log(e);
+    return done(e);
+  }
+};
 
-    try{
-        console.log(docPassword, user[0].password)
-        if(bcrypt.compare(docPassword, user[0].hashPassword, (err) => {
-            if(err){
-                console.log(err);
-                return err;
-            }
+const authenticatePatient = async (patName, patPassword, done) => {
+  console.log(patName);
+  const patient = await Patients.findOne({ name: patName });
+  console.log(patient);
+  if (!patient) {
+    return done(null, false, { message: 'No patient with that name' });
+  }
 
-            console.log('Logged In Successfully')
-            return done(null, user[0], {message : 'Logged In Successfully'});
-        }))
-        
-        return done(null, false, { message : 'Password Incorrect'})
-        
-    }catch(e){
-        console.log(e)
-        return done(e)
+  try {
+    const passwordMatch =await bcrypt.compare(patPassword, patient.password);
+    if (passwordMatch) {
+      console.log('Logged In Successfully');
+      return done(null, patient, { message: 'Logged In Successfully' });
+    } else {
+      return done(null, false, { message: 'Password Incorrect' });
     }
-
-}
-
-//initialize middleware 
-router.use(session({ //sets session to http
-    secret : process.env.SESSION_SECRET, // key that will encrypt everything for us
-    resave : false,
-    saveUninitialized : false
-}))
-
-router.use(passport.initialize())
-router.use(passport.session())
-
-
-//passport to define authentication strategy
-// for doctor
-passport.use(new LocalStrategy( { usernameField : 'docName', passwordField : 'docPassword' }, authenticateDoctor))
-//authenticateUser() sends done(null, user) to serializeUser() 
-
-router.use(flash())
-
-// to maintain login session, passport serializes & deserializes
-passport.serializeUser((user, done) => { 
-    console.log("serializing")
-    console.log(user)
-    console.log(user.id)
-
-    return done(null, user) 
-})
-
-passport.deserializeUser( async (user, done) => {
-    console.log("deserializing");
-    console.log()
-    try{
-        //const user = await Doctors.findById(id);
-        console.log(user);
-        done(null, user);
-    }catch(err){
-        console.log(err);
-        done(err, null);
-    }
-})
+  } catch (e) {
+    console.log(e);
+    return done(e);
+  }
+};
 
 router.get('/doctor', (req, res) => {
-    res.render('login/doctor')
+  res.render('login/doctor');
+});
+
+router.post('/doctor', async (req, res) => {
+
+  const doctor = await Doctors.findOne({ doctorSpecId : req.body.docId });
+  console.log(`doctor: ${doctor}, doctor's password: ${doctor.password}`);
+
+  const isMatched = bcrypt.compare(req.body.docPassword, doctor.password);
+  console.log(`Password Matched? ${isMatched}`);
+
+  try{
+
+    const token = await doctor.generateAuthToken();
+    console.log(`the token generated is ${token}`);
+
+    res.cookie("jwt", token, {
+      httpOnly: true,
+      expires : new Date(Date.now() + 30000) 
+    });
+
+
+    if(isMatched){
+      console.log('logged in');
+      res.redirect('/dashboard/doctor');
+    }else{
+      console.log('error while login');
+    }
+
+  }catch(e){
+    console.log(e);
+  }
+
 })
 
-router.post('/doctor', passport.authenticate('local', {
-    successRedirect : '/dashboard/doctor',
-    failureRedirect : '/login/doctor',
-    failureFlash : true
-}))
+router.get('/patient', (req, res) => {
+  res.render('login/patient');
+});
+
+router.post('/patient', async (req, res) => {
+
+  const patient = await Patients.findOne({ email : req.body.patEmail });
+  console.log(`Patient is ${patient}, patient's password: ${patient.password} & ${req.body.patPassword}`);
+
+  const isMatched = bcrypt.compare( patient.password, req.body.patPassword );
+  console.log(`Password matched? ${isMatched}`);
+
+  try{
+
+    const token = await patient.generateAuthToken();
+    console.log(`the token generated is ${token}`);
+
+    res.cookie("jwt", token, {
+      httpOnly: true,
+      expires : new Date(Date.now() + 30000) 
+    });
+
+    if(isMatched){
+      console.log("logged in");
+      res.redirect('/dashboard/patient');
+    }else{
+      console.log('error while login');
+    }
+
+  }catch(e){
+    console.log(e);
+  }
+
+});
 
 module.exports = router;
-
-//async doctor => await doctor.name === docName
-//id => doctor.id === id
-//initializePassport(passport, docName => Doctors.find({ name : docName})
-//, id => Doctors.find({ id : id}))
-
-
-
-//async (doctorSpecId, done) => { 
-//    console.log(doctorSpecId)
-//    const user = await Doctors.find({ doctorSpecId : doctorSpecId});
-//    console.log('after')
-//    console.log(user)
-//    return done(null, user) 
-
-//Doctors.findById(id).then((user) => {
-//    done(null, user)
-//})
-//console.log("after if")

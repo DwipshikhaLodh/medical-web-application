@@ -11,16 +11,17 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/stylesheets/dashboarddoctor.css">
+    <link rel="stylesheet" href="/stylesheets/docDashSlots.css">
 </head>
 <body>
+    
     <div class="body-container">
         <div class="body-aside-left">
             <ul class="upper-nav-body">
                 <li><i class="fa fa-heartbeat" aria-hidden="true"><h2>TruHealth</h2></i></li>
-                <li class="current"><a href="#">Home</a></li>
+                <li class="other"><a href="./doctor.ejs">Home</a></li>
                 <li class="other"><a href="./docDashPatients">Patients</a></li>
-                <li class="other"><a href="./docDashSlots.ejs">Slots</a></li>
+                <li class="current"><a href="#">Slots</a></li>
             </ul>
             <ul class="lower-nav-body">
                 <li>Log Out</li>
@@ -32,23 +33,7 @@
                 <b><%= name %></b>
             </div>
             <div class="lower-body-main">
-                <div class="lower-body-half">
-                    <div>
-                        <b>Total Patients</b>
-                        <p>registered in the site</p>
-                        <b>50</b>
-                    </div>
-                    <div>
-                        <b>Total Doctors</b>
-                        <p>registered in the site</p>
-                        <b>40</b>
-                    </div>
-                    <div>
-                        <b>Total Appointments</b>
-                        <p>till now</p>
-                        <b>10</b>
-                    </div>
-                </div>
+                
             </div>
         </div>
         <div class="body-aside-right">

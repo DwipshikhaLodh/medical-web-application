@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
@@ -5,6 +6,10 @@ const alert = require('alert')
 const Doctors = require('../models/doctor')
 const LegitDoctors = require('../models/legitDoctor')
 const Patients = require('../models/patient')
+const jwt = require('jsonwebtoken');
+const cookie_parser = require('cookie-parser');
+
+router.use(cookie_parser());
 
 router.get('/doctor', (req, res) => {
     res.render('register/doctor')
@@ -25,7 +30,17 @@ router.post('/doctor', async (req, res) => {
     try{
 
         const hashedPassword = await bcrypt.hash( req.body.docPassword, 10);
-        doctor.hashPassword = hashedPassword;
+        doctor.password = hashedPassword;
+
+        //code for token generation
+
+        const token = await doctor.generateAuthToken();
+        console.log(`the token generated is ${token}`);
+
+        res.cookie("jwt", token, {
+            httpOnly: true,
+            expires : new Date(Date.now() + 30000) 
+        });
 
         //code for verification
 
@@ -38,7 +53,7 @@ router.post('/doctor', async (req, res) => {
             console.log("entered")
             doctor = await doctor.save();
             res.redirect('/login/doctor');
-            alert(`Welcome ${result[0].name} to TruHealth`)
+            alert(`You got registered in TruHealth ${result[0].name}`)
         }else if( result != null & ( result[0].name != doctor.name | result[0].doctorSpecId == doctor.doctorSpecId )){
             alert(`Name & ID does not belong to same person`)
         }
@@ -67,6 +82,16 @@ router.post('/patient', async (req, res) => {
 
     try{
 
+        //for token generating
+
+        const token = await patient.generateAuthToken();
+        console.log(`the token generated is ${token}`);
+
+        res.cookie("jwt", token, {
+            httpOnly: true,
+            expires : new Date(Date.now() + 30000) 
+        });
+
         console.log("before hashing")
         const hashPatpassword = await bcrypt.hash( req.body.patPassword, 10);
         console.log("after hashing")
@@ -74,7 +99,7 @@ router.post('/patient', async (req, res) => {
         console.log("saving hashing")
         patient = await patient.save();
         console.log("after saving in db")
-        res.redirect('/loginPatient/patient')
+        res.redirect('/login/patient')
 
     }catch(e){
         console.log(e)

@@ -3,11 +3,11 @@
 }
 
 body{
-    background-color: rgb(229, 240, 245)
+    background-color: rgb(216, 232, 240);
 }
 
 .body-container{
-    background-color: rgb(229, 240, 245); 
+    background-color: rgb(216, 232, 240); 
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -24,7 +24,7 @@ body{
     position: fixed;
     top: 0px;
     left: 0px;
-    background-color: rgb(229, 240, 245); 
+    background-color: rgb(216, 232, 240); 
 }
 
 .upper-nav-body{
@@ -45,8 +45,7 @@ body{
 }
 
 .lower-nav-body{
-    background-color: rgb(5, 38, 52);
-    color: white;
+    background-color: rgb(216, 232, 240);
 }
 
 .lower-nav-body li{
@@ -63,16 +62,15 @@ body{
 
 .current{
     
-    background-color: #83a7b7;
-    border-color: #96baca;
+    background-color: rgb(15, 15, 130);
     border-radius: 20px 0px 0px 20px;
     margin-top: 18px;
     margin-bottom: 18px;
-    box-shadow: 1px 1px 8px 2px #83a7b7;
+    box-shadow: 1px 1px 8px 2px white;
 }
 
 .current a{
-    color: black;
+    color: white;
     padding-left: 20px;
 }
 
@@ -89,7 +87,7 @@ body{
     margin-left: 10px;
     display: flex;
     flex-direction: row;
-    background-color: rgb(229, 240, 245); 
+    background-color: rgb(216, 232, 240); 
 }
 
 .main-body-left{
@@ -103,7 +101,7 @@ body{
     align-items: center;
     justify-content: flex-end;
     padding: 10px;
-    background-color: rgb(229, 240, 245)
+    background-color: rgb(216, 232, 240);
 }
 
 .lower-body-main{
@@ -172,7 +170,13 @@ hr{
     flex-direction: row;
     justify-content: flex-end;
     align-items: center;
-    padding: 16px;
+    padding: 10px;
+    margin-right: 45px;
+}
+
+.fa-user-doctor{
+    margin-right: 10px;
+    font-size: larger;
 }
 
 .lower-main-body{
@@ -184,10 +188,10 @@ hr{
 
 .lower-main-body-left{
     background-color: white;
-    width: 98%;
+    width: 99%;
     padding: 20px;
     border: 2px solid white;
-    border-radius: 20px 20px 0px 0px;
+    border-radius: 0px 0px 0px 0px;
 }
 
 .patient-info h3 a{
@@ -203,12 +207,12 @@ hr{
     display: flex;
     flex-direction: column;
     margin-left: 8px;
-    padding: 5px;
+    padding: 4px;
     position: sticky;
     top: 70px;
 }
 
-.lower-main-body-right a{
-    text-decoration: none;
+.fa-pen-to-square{
+    font-size: larger;
     color: black;
 }

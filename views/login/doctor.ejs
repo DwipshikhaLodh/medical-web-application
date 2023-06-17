@@ -10,9 +10,6 @@
 <body>
     <div class="form-body">
         <h2>Doctor Login</h2>
-        <% if (messages.error) { %>
-            <%= messages.error %>
-        <% } %>
         <form action="/login/doctor" method="POST">
             <label for="docName">Name :
                 <input type="text" name="docName" value="" required id="docName">
@@ -24,7 +21,7 @@
                 <input type="password" name="docPassword" value="" id="docPassword" required>
             </label>
             <button type="submit">Login</button>
-        <a href="/register/doctor">Register</a>
+            <a href="/register/doctor">Register</a>
         </form>
         
     </div>

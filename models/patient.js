@@ -1,5 +1,7 @@
+require('dotenv').config();
 const mongoose = require('mongoose')
 const slugify = require('slugify')
+const jwt = require('jsonwebtoken')
 
 const patientSchema = new mongoose.Schema({
     name : {
@@ -8,7 +10,8 @@ const patientSchema = new mongoose.Schema({
     },
     email : {
         type : String,
-        require : true
+        require : true,
+        unique : true
     },
     contact_no : {
         type : Number,
@@ -30,8 +33,23 @@ const patientSchema = new mongoose.Schema({
         type : String,
         require : true,
         unique : true
-    }
+    },
+    tokens: [{
+        token : String
+    }]
 })
+
+patientSchema.methods.generateAuthToken = async function() {
+    try{
+        const token = jwt.sign({ _id : this._id.toString()}, process.env.PATIENT_SECRET_KEY);
+        this.tokens = this.tokens.concat({ token : token });
+        console.log(`the token in patientschema ${token}`);
+        await this.save();
+        return token;
+    }catch(e){
+        console.log(`the error is ${e}`);
+    }
+}
 
 patientSchema.pre('validate', function(next) {
     if(this.name){
